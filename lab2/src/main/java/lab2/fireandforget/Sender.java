@@ -1,6 +1,6 @@
 package lab2.fireandforget;
 
-import lab2.utils.Connections;
+import lab2.utils.Utils;
 
 import javax.jms.*;
 
@@ -10,22 +10,34 @@ import javax.jms.*;
  * @author Peter Bromander, peter.bromander@dogfish.se
  */
 public class Sender {
-    public static void main(String[] args) throws Exception {
-        System.out.println("Starting fire and forget sender...");
-        new Sender().send();
+    public static void main(String[] args) {
+        System.out.println("Starting " + Sender.class.getName());
+        new Sender().send12();
     }
 
-    private void send() throws JMSException {
+    private void send12() {
         String queueName = "Q1";
-        Connection connection = Connections.getConnection();
 
         // Create JMS session and JMS producer.
-        try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        try (Connection connection = Utils.getConnection();
+             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
              MessageProducer producer = session.createProducer(session.createQueue(queueName))) {
 
             // Send a message
             producer.send(session.createTextMessage("Hello!"));
             System.out.println("Message sent to queue " + queueName);
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendJMS20() {
+        String queueName = "Q1";
+        try (JMSContext context = Utils.getContext()) {
+            context.createProducer().send(context.createQueue(queueName), "Hello");
+            System.out.println("Message sent to queue " + queueName);
+        } catch (JMSRuntimeException | JMSException e) {
+            e.printStackTrace();
         }
     }
 }
