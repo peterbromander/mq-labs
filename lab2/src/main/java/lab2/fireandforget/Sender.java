@@ -35,7 +35,7 @@ public class Sender {
         String queueName = "LAB2.Q1";
         try (JMSContext context = Utils.getContext()) {
             context.createProducer().send(context.createQueue(queueName), "Hello");
-            System.out.println("Message sent to queue " + queueName);
+            System.out.println("Message sent using JMS20 to queue " + queueName);
         } catch (JMSRuntimeException | JMSException e) {
             e.printStackTrace();
         }

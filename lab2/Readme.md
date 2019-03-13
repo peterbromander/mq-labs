@@ -2,7 +2,7 @@
 
 _E.g. running "lab2.tx.Sender"_
 
-`mvn exec:java -Dexec.mainClass="lab2.tx.Sender"`
+`mvn package exec:java -Dexec.mainClass="lab2.tx.Sender"`
 
 
 ***
@@ -14,7 +14,7 @@ _E.g. running "lab2.tx.Sender"_
 local MQ settings created in Lab1
 
 2. Send a message to queue by running the following maven command
-``mvn exec:java -Dexec.mainClass="lab2.fireandforget.Sender"``
+``mvn package exec:java -Dexec.mainClass="lab2.fireandforget.Sender"``
 _This command will compile and run the program_ 
 
 3. Verify that the message is on the target queue using the MQ Web UI
