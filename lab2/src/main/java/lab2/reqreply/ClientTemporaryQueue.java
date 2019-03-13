@@ -15,26 +15,21 @@ public class ClientTemporaryQueue {
     }
 
     private void makeRequest() {
-        String queueName = "Q1";
+        String queueName = "LAB2.Q1";
 
         // Create JMS session and JMS producer.
-        try (Connection connection = Utils.getConnection();
-             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-             MessageProducer producer = session.createProducer(session.createQueue(queueName))) {
-
-            Message request = session.createTextMessage("Hello!");
-
-            Destination replyQueue = session.createTemporaryQueue();
-
+        try (JMSContext context = Utils.getContext())
+        {
+            JMSProducer producer = context.createProducer();
+            Message request = context.createTextMessage("Hello!");
+            Destination replyQueue = context.createTemporaryQueue();
             //
             request.setJMSReplyTo(replyQueue);
             // Send a message
-            producer.send(request);
+            producer.send(context.createQueue(queueName),request);
             System.out.println("Message sent to queue " + queueName);
 
-            MessageConsumer consumer = session.createConsumer(replyQueue);
-
-            connection.start();
+            JMSConsumer consumer = context.createConsumer(replyQueue);
 
             Message responseMessage = consumer.receive();
             System.out.println("Got response " + responseMessage.getJMSMessageID());

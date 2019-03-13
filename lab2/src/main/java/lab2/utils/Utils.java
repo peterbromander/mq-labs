@@ -14,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Properties;
+import java.util.Random;
 
 /**
  * Created on 2019-02-20.
@@ -23,6 +24,13 @@ import java.util.Properties;
 public class Utils {
 
     Properties prop = new Properties();
+
+    public static byte[] generateRandomBytes(int size) {
+        byte[] randomSeq = new byte[size];
+        new Random().nextBytes(randomSeq);
+        return randomSeq;
+    }
+
     public void init() throws IOException {
         prop.load(new FileInputStream("Application.properties"));
     }

@@ -37,11 +37,21 @@ public class Idempotent implements SessionAwareMessageListener {
     @JmsListener(destination = "${proxy.receive-queue}")
     @Transactional
     public void onMessage(Message message, Session session) throws RuntimeException {
-        String hash = hash(message);
-        try (MessageProducer producerTarget = session.createProducer(session.createQueue(message.getStringProperty(TARGET_KEY)));
+        try {
+            processMessage(message, session);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to process message - " + e.getMessage());
+        }
+    }
+
+    private void processMessage(Message message, Session session) throws RuntimeException, JMSException, NoSuchAlgorithmException {
+        //String targetQueue=message.getStringProperty(TARGET_KEY);
+        String targetQueue = "LAB3.OUT";
+
+        String hash = hash(message, targetQueue);
+        try (MessageProducer producerTarget = session.createProducer(session.createQueue(targetQueue));
              MessageProducer producerState = session.createProducer(session.createQueue(STATE_QUEUE));
              QueueBrowser browserState = session.createBrowser(session.createQueue(STATE_QUEUE), "JMSCorrelationID='ID:" + hash + "'")) {
-
 
             if (!browserState.getEnumeration().hasMoreElements()) {
 
@@ -57,18 +67,22 @@ public class Idempotent implements SessionAwareMessageListener {
                 producerTarget.setDeliveryMode(DeliveryMode.PERSISTENT);
                 producerTarget.send(message);
 
-                LOG.info("hash={}, JMS_MESSAGE_HASH='{}', action='Sent to queue={}', msgid={}, retention={}", hash, message.getStringProperty(MESSAGE_HASH_KEY), message.getStringProperty(TARGET_KEY), message.getJMSMessageID(), STATE_RETENTION_HOURS);
+                LOG.info("hash={}, JMS_MESSAGE_HASH='{}', action='Sent to queue={}', msgid={}, retention={}", hash, message.getStringProperty(MESSAGE_HASH_KEY), targetQueue, message.getJMSMessageID(), STATE_RETENTION_HOURS);
             } else {
                 LOG.warn("hash={}, JMS_MESSAGE_HASH='{}', action='Already sent - discarded',  msg={}", hash, message.getStringProperty(MESSAGE_HASH_KEY), ((TextMessage) message).getText());
             }
+        } catch (JMSException e) {
+            throw new RuntimeException("Failed to process message" + e.getLinkedException().getMessage(), e);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to process message", e);
+            throw new RuntimeException("Failed to process message" + e.getMessage(), e);
         }
     }
 
-    private String hash(Message message) throws NoSuchAlgorithmException, JMSException {
+    private String hash(Message message, String queueName) throws NoSuchAlgorithmException, JMSException {
         MessageDigest md = MessageDigest.getInstance("SHA");
-        String queueName = message.getStringProperty(TARGET_KEY);
+
+        if (queueName == null) throw new RuntimeException("Message do not contain target queue");
+
         String existingHash = message.getStringProperty(MESSAGE_HASH_KEY);
 
         if (existingHash != null && existingHash.length() > 1) {

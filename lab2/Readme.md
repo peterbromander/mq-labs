@@ -1,5 +1,7 @@
 **Run a sample**
 
+_E.g. running "lab2.tx.Sender"_
+
 `mvn exec:java -Dexec.mainClass="lab2.tx.Sender"`
 
 
@@ -9,7 +11,7 @@
 
 
 1. Ensure that the configuration in file `src/main/java/lab2/utils/Application.properties`  file matches your 
-local MQ settings
+local MQ settings created in Lab1
 
 2. Send a message to queue by running the following maven command
 ``mvn exec:java -Dexec.mainClass="lab2.fireandforget.Sender"``
