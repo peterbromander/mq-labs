@@ -45,8 +45,8 @@ public class Idempotent implements SessionAwareMessageListener {
     }
 
     private void processMessage(Message message, Session session) throws RuntimeException, JMSException, NoSuchAlgorithmException {
-        //String targetQueue=message.getStringProperty(TARGET_KEY);
-        String targetQueue = "LAB3.OUT";
+        String targetQueue=message.getStringProperty(TARGET_KEY);
+        //String targetQueue = "LAB3.OUT";
 
         String hash = hash(message, targetQueue);
         try (MessageProducer producerTarget = session.createProducer(session.createQueue(targetQueue));

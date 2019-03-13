@@ -7,14 +7,17 @@ This project contains three different lab. Lab number one is a prerequisite for 
 
 ## Lab 1  - MQ running in docker
 
-See 
+
 ***
 
-#lab1/
 
 
 ## Lab 2  - MQ and Java JMS
 
-See 
+***
+
+
+## Lab 3  - Spring boot 
+
 
 
