@@ -64,6 +64,19 @@ receiving step 6 by calling the `Utils.printJMSProperties(messge)`.
 
  
 
+***
+**Request Reply**
+
+Ensure you have a queue called LAB2.Q2 with mqclient permissions using the Web UI
+Start the lab2.reqreply.Server
+
+Start the lab2.reqreply.ClientCorrelationId
+
+What happens?
+
+ReRun with lab2.reqreply.ClientTemporaryQueue
+
+What happens?
 
 
 
@@ -72,9 +85,7 @@ receiving step 6 by calling the `Utils.printJMSProperties(messge)`.
 1. 
 
 ***
-**Request Reply**
 
-***
 
 **IBM JMS Configurations**
 

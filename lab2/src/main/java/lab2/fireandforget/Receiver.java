@@ -12,19 +12,19 @@ import javax.jms.*;
  */
 public class Receiver {
     public static void main(String[] args) throws Exception {
-        System.out.println("Starting fire and forget sender...");
-        new Receiver().receiver11();
+        System.out.println("Starting " + Receiver.class.getName());
+        new Receiver().receiver20();
     }
 
     private void receiver11() throws JMSException {
         Connection connection = Utils.getConnection2();
         try (
-             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-             MessageConsumer consumer = session.createConsumer(session.createQueue("LAB2.Q1"))) {
+                Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+                MessageConsumer consumer = session.createConsumer(session.createQueue("LAB2.Q1"))) {
             connection.start();
             System.out.println("Waiting for message");
 
-            while (true)  {
+            while (true) {
                 try {
                     Message message = consumer.receive();
                     if (message instanceof JMSTextMessage)
@@ -43,20 +43,16 @@ public class Receiver {
 
     private void receiver20() throws InterruptedException {
         while (true) {
-            try (Connection connection = Utils.getConnection();
-                 Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-                 MessageConsumer consumer = session.createConsumer(session.createQueue("LAB2.Q1"))) {
-                connection.start();
+            try (JMSContext context = Utils.getContext();
+                 JMSConsumer consumer = context.createConsumer(context.createQueue("LAB2.Q1"))) {
+
                 System.out.println("Waiting for message");
                 Message message = consumer.receive();
-                if (message instanceof JMSTextMessage)
-                    System.out.println("Got message " + ((JMSTextMessage) message).getText());
-                else
-                    System.out.println("Got message of type " + message.getJMSType());
+
+                System.out.println("Got message " + message.getBody(String.class));
+
             } catch (Exception e) {
-                //e.printStackTrace();
                 System.out.println(e.getMessage());
-                Thread.sleep(1000*5);
             }
         }
     }

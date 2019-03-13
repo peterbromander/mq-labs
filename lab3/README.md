@@ -59,3 +59,11 @@ What happens? Look at the LAB3.STATE queue.
 ## Testing reconnection 
 
 First start the application
+
+Stop the queue manager using the Web UI
+
+Look at the Log files 
+
+Restart the queue manager 
+
+What happens? 

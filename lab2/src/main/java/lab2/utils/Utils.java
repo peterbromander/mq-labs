@@ -91,7 +91,7 @@ public class Utils {
         System.out.println("CID     \t" + message.getJMSCorrelationID());
         System.out.println("RepylTo \t" + message.getJMSReplyTo());
         System.out.println("Expiry  \t" + message.getJMSExpiration());
-        System.out.println("Del mode\t" + message.getJMSDeliveryMode());
+        System.out.println("Delivery mode\t" + message.getJMSDeliveryMode());
         System.out.println("Prio    \t" + message.getJMSPriority());
         System.out.println("Type    \t" + message.getJMSType());
         System.out.println("Class    \t" + message.getClass().getName());
