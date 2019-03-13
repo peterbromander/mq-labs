@@ -20,7 +20,7 @@ public class Sender {
      *
      */
     private void send() throws JMSException {
-        String queueName = "Q1";
+        String queueName = "LAB2.Q1";
         /*
         Session.AUTO_ACKNOWLEDGE;
         Session.CLIENT_ACKNOWLEDGE;

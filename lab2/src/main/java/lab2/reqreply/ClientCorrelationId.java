@@ -18,16 +18,16 @@ public class ClientCorrelationId {
     }
 
     private void makeRequest() {
-        String queueName = "Q1";
+        String queueName = "LAB2.Q1";
 
         // Create JMS session and JMS producer.
         try (JMSContext connection = Utils.getContext()) {
 
             Message request = connection.createTextMessage("Hello!");
 
-            Destination replyQueue = connection.createQueue("Q2");
+            Destination replyQueue = connection.createQueue("LAB2.Q2");
 
-            Destination requestQueue = connection.createQueue("Q1");
+            Destination requestQueue = connection.createQueue("LAB2.Q1");
 
             request.setJMSReplyTo(replyQueue);
 

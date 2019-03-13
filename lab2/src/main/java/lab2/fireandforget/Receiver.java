@@ -20,7 +20,7 @@ public class Receiver {
         Connection connection = Utils.getConnection2();
         try (
              Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-             MessageConsumer consumer = session.createConsumer(session.createQueue("Q1"))) {
+             MessageConsumer consumer = session.createConsumer(session.createQueue("LAB2.Q1"))) {
             connection.start();
             System.out.println("Waiting for message");
 
@@ -45,7 +45,7 @@ public class Receiver {
         while (true) {
             try (Connection connection = Utils.getConnection();
                  Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-                 MessageConsumer consumer = session.createConsumer(session.createQueue("Q1"))) {
+                 MessageConsumer consumer = session.createConsumer(session.createQueue("LAB2.Q1"))) {
                 connection.start();
                 System.out.println("Waiting for message");
                 Message message = consumer.receive();

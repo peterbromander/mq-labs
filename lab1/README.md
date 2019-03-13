@@ -35,4 +35,4 @@ https://localhost:9443/ibmmq/console/
 * Password: passw0rd
 
 
-3 Create a new local queue called "Q1", we will use this queue later on
+3 Create a new local queue called "LAB2.Q1", we will use this queue later on

@@ -16,7 +16,7 @@ public class Sender {
     }
 
     private void send12() {
-        String queueName = "Q1";
+        String queueName = "LAB2.Q1";
 
         // Create JMS session and JMS producer.
         try (Connection connection = Utils.getConnection();
@@ -32,7 +32,7 @@ public class Sender {
     }
 
     private void sendJMS20() {
-        String queueName = "Q1";
+        String queueName = "LAB2.Q1";
         try (JMSContext context = Utils.getContext()) {
             context.createProducer().send(context.createQueue(queueName), "Hello");
             System.out.println("Message sent to queue " + queueName);
