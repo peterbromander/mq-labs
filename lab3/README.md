@@ -37,13 +37,19 @@ For testing purpose let's change the service to do static routing to the queue `
 
  - Create new queue LAB3.OUT 
  - Modify the service code in `Idempotent.java` by adding the following code:
+ 
+ ```
          String targetQueue=message.getStringProperty(TARGET_KEY);
         //String targetQueue = "LAB3.OUT";
+```
 
 to 
+
+
+```
         //String targetQueue=message.getStringProperty(TARGET_KEY);
         String targetQueue = "LAB3.OUT";
-
+```
     
     
 Re-start the application. Put a new test message with the text "Hello" on the `LAB3.IN` queue.
