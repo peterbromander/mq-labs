@@ -36,6 +36,8 @@ receiving step 6 by calling the `Utils.printJMSProperties(messge)`.
 
 10. Re-run 2-6 and verify 
 
+
+Skip 11 to 14
 11. This behaviour (persistence) can be accomplished without any code change. How?
 
 12. Revert back to the original sender code
