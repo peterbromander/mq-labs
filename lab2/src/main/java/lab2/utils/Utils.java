@@ -6,10 +6,7 @@ import com.ibm.msg.client.jms.JmsConnectionFactory;
 import com.ibm.msg.client.jms.JmsFactoryFactory;
 import com.ibm.msg.client.wmq.WMQConstants;
 
-import javax.jms.Connection;
-import javax.jms.JMSContext;
-import javax.jms.JMSException;
-import javax.jms.Message;
+import javax.jms.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Enumeration;

@@ -12,10 +12,10 @@ import javax.jms.*;
 public class Sender {
     public static void main(String[] args) {
         System.out.println("Starting " + Sender.class.getName());
-        new Sender().send12();
+        new Sender().send11();
     }
 
-    private void send12() {
+    private void send11() {
         String queueName = "LAB2.Q1";
 
         // Create JMS session and JMS producer.
@@ -34,7 +34,6 @@ public class Sender {
     private void sendJMS20() {
         String queueName = "LAB2.Q1";
         try (JMSContext context = Utils.getContext()) {
-
             context.createProducer().setDeliveryMode(DeliveryMode.NON_PERSISTENT).send(context.createQueue(queueName), "Hello");
             System.out.println("Message sent using JMS20 to queue " + queueName);
         } catch (JMSRuntimeException | JMSException e) {

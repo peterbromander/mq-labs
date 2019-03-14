@@ -49,6 +49,8 @@ public class Receiver {
                 System.out.println("Waiting for message");
                 Message message = consumer.receive();
 
+                //Utils.printJMSProperties(message);
+
                 System.out.println("Got message " + message.getBody(String.class));
 
             } catch (Exception e) {

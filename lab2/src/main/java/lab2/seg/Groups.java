@@ -60,13 +60,9 @@ public class Groups {
 
 
         final byte[] recoveredBlocks = new byte[BIG_BLOCK];
-
+/*
         for (int z = 1; z < receivedGroupSize; z++) {
-            /*
-                We use JMSXGroupID and JMSXGroupSeq for recovery simplicity.
-                You are free to use JMSXGroupID and reorder messages manually.
-             */
-            JMSConsumer consumer = context.createConsumer(queue, "JMSXGroupID='" + receivedGroupId + "'AND JMSXGroupSeq=" + z);
+             JMSConsumer consumer = context.createConsumer(queue, "JMSXGroupID='" + receivedGroupId + "'AND JMSXGroupSeq=" + z);
             BytesMessage message = (BytesMessage) consumer.receiveNoWait();
             long bodyLength = message.getBodyLength();
             byte[] bodyBuffer = new byte[(int) bodyLength];
@@ -78,5 +74,6 @@ public class Groups {
         byte[] bodyBuffer = new byte[(int) lastMessageBodyLen];
         lastMessage.readBytes(bodyBuffer);
         System.arraycopy(bodyBuffer, 0, recoveredBlocks, (receivedGroupSize - 1) * SMALL_BLOCK, SMALL_BLOCK);
+        */
     }
 }

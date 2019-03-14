@@ -7,14 +7,16 @@ _E.g. running "lab2.tx.Sender"_
 
 ***
 
-**Fire and Forget**
+##Fire and Forget
 
 
 1. Ensure that the configuration in file `src/main/java/lab2/utils/Application.properties`  file matches your 
 local MQ settings created in Lab1
 
 2. Send a message to queue by running the following maven command
-``mvn package exec:java -Dexec.mainClass="lab2.fireandforget.Sender"``
+
+>mvn package exec:java -Dexec.mainClass="lab2.fireandforget.Sender"
+
 _This command will compile and run the program_ 
 
 3. Verify that the message is on the target queue using the MQ Web UI
@@ -65,7 +67,7 @@ receiving step 6 by calling the `Utils.printJMSProperties(messge)`.
  
 
 ***
-**Request Reply**
+##Request Reply
 
 Ensure you have a queue called LAB2.Q2 with mqclient permissions using the Web UI
 Start the lab2.reqreply.Server
@@ -81,13 +83,59 @@ What happens?
 
 
 ***
-**Publish and Subscribe**
-1. 
+##Publish and Subscribe
+
+Start the lab2.pubsub.Subscriber
+
+>mvn package exec:java -Dexec.mainClass="lab2.pubsub.Subscriber"
+
+This will register a subscriber and wait for publications
+
+Now start the publisher in another window 
+
+>mvn package exec:java -Dexec.mainClass="lab2.pubsub.Publisher"
+
+You should receive the publication in the subscriber window. 
+
+The subscriber is now stoped.
+
+Rerun the Publisher and then the Subscriber in that order.
+
+You should not the Subscriber should not receive any publication.
+
+No modify the Subscriber code to create a durable subscriber.
+
+Run the modified subscriber, this version only waits one second for a publication and then exits
+
+Now run the Publisher and the Subscriber, you should receive the subscription even thou the subscribing app wasn't running 
+during the publication.
+
+We have created a durable subscription!
+
+Open the Web UI and add the subscription Widget. You should se you subscription in the list.
+To remove a durable subscription you need the unsubscribe. You can do this by uncomment the code
+subscriber and re run. 
+
+Verify that the subscription is gone from the Web UI
+
+
+####Retained Publications
+Change the Publisher to send Retained Publication and run it once.
+
+
+Then change the Subscriber to non durable subscriber and run. 
+You should now receive the message even thou you did not have a subscriber during the Publication
+
+Now open the Web UI look in the queue list Push the Settings icon and Show System Objects.
+Sort by queue depth, find the queue SYSTEM.RETAINED.PUB.QUEUE and locate you publication
+
+
+
 
 ***
 
 
-**IBM JMS Configurations**
+##IBM JMS Configurations
 
 ```
 -Dcom.ibm.mq.jms.replyToStyle=RFH2 
