@@ -12,14 +12,14 @@ import javax.jms.*;
 public class Sender {
     public static void main(String[] args) {
         System.out.println("Starting " + Sender.class.getName());
-        new Sender().send11();
+        new Sender().sendJMS20();
     }
 
     private void send11() {
         String queueName = "LAB2.Q1";
 
         // Create JMS session and JMS producer.
-        try (Connection connection = Utils.getConnection();
+        try (Connection connection = Utils.getJmsConnectionFactory().createConnection();
              Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
              MessageProducer producer = session.createProducer(session.createQueue(queueName))) {
 
@@ -33,8 +33,8 @@ public class Sender {
 
     private void sendJMS20() {
         String queueName = "LAB2.Q1";
-        try (JMSContext context = Utils.getContext()) {
-            context.createProducer().setDeliveryMode(DeliveryMode.NON_PERSISTENT).send(context.createQueue(queueName), "Hello");
+        try (JMSContext context = Utils.getJmsConnectionFactory().createContext()) {
+            context.createProducer().setDeliveryMode(DeliveryMode.PERSISTENT).send(context.createQueue(queueName), "Hello");
             System.out.println("Message sent using JMS20 to queue " + queueName);
         } catch (JMSRuntimeException | JMSException e) {
             e.printStackTrace();

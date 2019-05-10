@@ -10,11 +10,12 @@ import javax.jms.*;
 public class Subscriber {
     public static void main(String[] args) throws Exception {
         System.out.println("Starting " + Subscriber.class.getName());
-        new Subscriber().subscribe();
+        new Subscriber().subscribeDurable();
+
     }
 
     private void subscribe() {
-        try (JMSContext context = Utils.getContext()) {
+        try (JMSContext context = Utils.getJmsConnectionFactory().createContext()) {
             Topic topic = context.createTopic("dev/");
             JMSConsumer consumer = context.createConsumer(topic);
             System.out.println("Subscribe to topic " + topic.getTopicName());
@@ -26,7 +27,7 @@ public class Subscriber {
     }
 
     private void subscribeDurable() {
-        try (JMSContext context = Utils.getContext()) {
+        try (JMSContext context = Utils.getJmsConnectionFactory().createContext()) {
             Topic topic = context.createTopic("dev/");
 
             // We need to set the ID when using durable subscriptions.

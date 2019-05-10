@@ -26,7 +26,7 @@ public class Groups {
 
         byte[] bigBlock = Utils.generateRandomBytes(BIG_BLOCK);
 
-        JMSContext context = Utils.getContext();
+        JMSContext context = Utils.getJmsConnectionFactory().createContext();
         Queue queue = context.createQueue(QUEUE_NAME);
         JMSProducer producer = context.createProducer();
         final String groupId = "ID:" + new BigInteger(24 * 8, new Random()).toString(16);
@@ -60,7 +60,6 @@ public class Groups {
 
 
         final byte[] recoveredBlocks = new byte[BIG_BLOCK];
-/*
         for (int z = 1; z < receivedGroupSize; z++) {
              JMSConsumer consumer = context.createConsumer(queue, "JMSXGroupID='" + receivedGroupId + "'AND JMSXGroupSeq=" + z);
             BytesMessage message = (BytesMessage) consumer.receiveNoWait();
@@ -74,6 +73,6 @@ public class Groups {
         byte[] bodyBuffer = new byte[(int) lastMessageBodyLen];
         lastMessage.readBytes(bodyBuffer);
         System.arraycopy(bodyBuffer, 0, recoveredBlocks, (receivedGroupSize - 1) * SMALL_BLOCK, SMALL_BLOCK);
-        */
+
     }
 }

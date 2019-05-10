@@ -1,9 +1,11 @@
 package lab2.fireandforget;
 
 import com.ibm.jms.JMSTextMessage;
+import com.ibm.msg.client.jms.JmsConnectionFactory;
 import lab2.utils.Utils;
 
 import javax.jms.*;
+import javax.xml.stream.FactoryConfigurationError;
 
 /**
  * Created on 2019-02-20.
@@ -17,7 +19,7 @@ public class Receiver {
     }
 
     private void receiver11() throws JMSException {
-        Connection connection = Utils.getConnection2();
+        Connection connection = Utils.getJmsConnectionFactory().createConnection();
         try (
                 Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
                 MessageConsumer consumer = session.createConsumer(session.createQueue("LAB2.Q1"))) {
@@ -41,17 +43,22 @@ public class Receiver {
         }
     }
 
-    private void receiver20() throws InterruptedException {
+    private void receiver20() throws InterruptedException, JMSException {
+        JmsConnectionFactory cf= Utils.getJmsConnectionFactory();
         while (true) {
-            try (JMSContext context = Utils.getContext();
+            try (JMSContext context = cf.createContext(Session.SESSION_TRANSACTED);
                  JMSConsumer consumer = context.createConsumer(context.createQueue("LAB2.Q1"))) {
+
 
                 System.out.println("Waiting for message");
                 Message message = consumer.receive();
 
-                //Utils.printJMSProperties(message);
+                Utils.printJMSProperties(message);
 
                 System.out.println("Got message " + message.getBody(String.class));
+
+               // throw new RuntimeException("Failed");
+                context.commit();
 
             } catch (Exception e) {
                 System.out.println(e.getMessage());

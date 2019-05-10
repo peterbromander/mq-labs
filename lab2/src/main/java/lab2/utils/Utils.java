@@ -1,12 +1,12 @@
 package lab2.utils;
 
 
-import com.ibm.mq.jms.MQConnectionFactory;
 import com.ibm.msg.client.jms.JmsConnectionFactory;
 import com.ibm.msg.client.jms.JmsFactoryFactory;
 import com.ibm.msg.client.wmq.WMQConstants;
 
-import javax.jms.*;
+import javax.jms.JMSException;
+import javax.jms.Message;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Enumeration;
@@ -14,7 +14,6 @@ import java.util.Properties;
 import java.util.Random;
 
 /**
- * Created on 2019-02-20.
  *
  * @author Peter Bromander, peter.bromander@dogfish.se
  */
@@ -32,45 +31,15 @@ public class Utils {
         prop.load(new FileInputStream("Application.properties"));
     }
 
-    public static Connection getConnection() throws JMSException {
-        MQConnectionFactory cf = new MQConnectionFactory();
-        cf.setTransportType(WMQConstants.WMQ_CM_CLIENT);
-        cf.setChannel("DEV.APP.SVRCONN");
-        cf.setConnectionNameList("127.0.0.1(1414)");
-        cf.setClientReconnectOptions(WMQConstants.WMQ_CLIENT_RECONNECT_Q_MGR);
-        cf.setClientReconnectTimeout(600);
-        return cf.createConnection();
-    }
-
-
-    public static Connection getConnection2() throws JMSException {
-        JmsFactoryFactory ff = JmsFactoryFactory.getInstance(WMQConstants.WMQ_PROVIDER);
-        JmsConnectionFactory cf = ff.createConnectionFactory();
-        cf.setStringProperty(WMQConstants.WMQ_HOST_NAME, "127.0.0.1");
-        cf.setIntProperty(WMQConstants.WMQ_PORT, 1414);
-        cf.setStringProperty(WMQConstants.WMQ_CHANNEL, "DEV.APP.SVRCONN");
-        cf.setIntProperty(WMQConstants.WMQ_CONNECTION_MODE, WMQConstants.WMQ_CM_CLIENT);
-        cf.setIntProperty(WMQConstants.WMQ_CLIENT_RECONNECT_OPTIONS, WMQConstants.WMQ_CLIENT_RECONNECT_Q_MGR);
-   //     cf.setStringProperty(WMQConstants.WMQ_QUEUE_MANAGER, "QM1");
-       // cf.setStringProperty(WMQConstants.WMQ_APPLICATIONNAME, "JmsPutGet (JMS)");
-       // cf.setBooleanProperty(WMQConstants.USER_AUTHENTICATION_MQCSP, true);
-       // cf.setStringProperty(WMQConstants.USERID, APP_USER);
-       // cf.setStringProperty(WMQConstants.PASSWORD, APP_PASSWORD);
-        return cf.createConnection();
-    }
-
-    public static JMSContext getContext() throws JMSException {
-        JmsFactoryFactory ff = JmsFactoryFactory.getInstance(WMQConstants.WMQ_PROVIDER);
-        JmsConnectionFactory cf = ff.createConnectionFactory();
-        cf.setStringProperty(WMQConstants.WMQ_HOST_NAME, "127.0.0.1");
-        cf.setIntProperty(WMQConstants.WMQ_PORT, 1414);
-        cf.setStringProperty(WMQConstants.WMQ_CHANNEL, "DEV.APP.SVRCONN");
-        cf.setIntProperty(WMQConstants.WMQ_CONNECTION_MODE, WMQConstants.WMQ_CM_CLIENT);
-        cf.setIntProperty(WMQConstants.WMQ_CLIENT_RECONNECT_OPTIONS, WMQConstants.WMQ_CLIENT_RECONNECT_Q_MGR);
-  //      cf.setStringProperty(WMQConstants.WMQ_QUEUE_MANAGER, "QM1");
-        return cf.createContext();
-    }
-
+    /**
+     * This returns a JmsConnectionFactory, it is recommended that you use JMS2.0 jmsConnectionFactory.createContext()
+     *
+     * ** DO NOT ** specify the queue manager name.
+     *
+     * If you need SSL see comments below.
+     * @return The factory
+     * @throws JMSException
+     */
     public static JmsConnectionFactory getJmsConnectionFactory() throws JMSException {
         JmsFactoryFactory ff = JmsFactoryFactory.getInstance(WMQConstants.WMQ_PROVIDER);
         JmsConnectionFactory cf = ff.createConnectionFactory();
@@ -79,7 +48,30 @@ public class Utils {
         cf.setStringProperty(WMQConstants.WMQ_CHANNEL, "DEV.APP.SVRCONN");
         cf.setIntProperty(WMQConstants.WMQ_CONNECTION_MODE, WMQConstants.WMQ_CM_CLIENT);
         cf.setIntProperty(WMQConstants.WMQ_CLIENT_RECONNECT_OPTIONS, WMQConstants.WMQ_CLIENT_RECONNECT_Q_MGR);
-      //  cf.setStringProperty(WMQConstants.WMQ_QUEUE_MANAGER, "QM1");
+        /*
+         * To use SSL you need to do the following:
+         *
+         * 1. Un comment the line below, The actual cipher value needs to bee coordinated with the MQ operations
+         */
+
+       //  cf.setStringProperty(WMQConstants.WMQ_SSL_CIPHER_SUITE,"TLS_RSA_WITH_AES_128_CBC_SHA");
+
+        /*
+         * 2. If your not running a IBM JRE you need to specify
+         * -Dcom.ibm.mq.cfg.useIBMCipherMappings=false
+         *
+         *
+         *
+         * 3. The you need to point to your JKS-file which should be both trust- and key-store .
+         * -Djavax.net.ssl.keyStore=/.../your.jks
+         * -Djavax.net.ssl.trustStore=/.../your.jks
+         * -Djavax.net.ssl.keyStorePassword=*****
+         * -Djavax.net.ssl.trustStorePassword=****
+         *
+         *
+         * If you still get error you can debug the SSL using
+         * -Djavax.net.debug=all
+         */
         return cf;
     }
 

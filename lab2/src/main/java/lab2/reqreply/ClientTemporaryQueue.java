@@ -18,7 +18,7 @@ public class ClientTemporaryQueue {
         String queueName = "LAB2.Q1";
 
         // Create JMS session and JMS producer.
-        try (JMSContext context = Utils.getContext())
+        try (JMSContext context = Utils.getJmsConnectionFactory().createContext())
         {
             JMSProducer producer = context.createProducer();
             Message request = context.createTextMessage("Hello!");

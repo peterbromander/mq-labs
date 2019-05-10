@@ -19,7 +19,7 @@ public class Server {
 
     private void processRequests() {
         String queueName = "LAB2.Q1";
-        try (JMSContext context = Utils.getContext()) {
+        try (JMSContext context = Utils.getJmsConnectionFactory().createContext()) {
 
             JMSConsumer consumer = context.createConsumer(context.createQueue(queueName));
             JMSProducer producer = context.createProducer();
